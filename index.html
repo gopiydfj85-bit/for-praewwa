@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>For Praewwa 💖</title>
+
+<style>
+body {
+    margin: 0;
+    background: radial-gradient(circle, #000000, #1a001a);
+    overflow: hidden;
+    font-family: monospace;
+}
+
+/* หัวใจ */
+#heart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: pre;
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
+    animation: beat 1.2s infinite;
+}
+
+/* ไล่สี */
+.char {
+    animation: colorShift 3s linear infinite;
+}
+
+@keyframes colorShift {
+    0% { color: #ff6b81; text-shadow: 0 0 5px #ff6b81; }
+    50% { color: #ff99aa; text-shadow: 0 0 20px #ff99aa; }
+    100% { color: #ff6b81; text-shadow: 0 0 5px #ff6b81; }
+}
+
+/* เต้น */
+@keyframes beat {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.15); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+/* ชื่อกลาง */
+#name {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 40px;
+    color: white;
+    text-shadow: 0 0 20px pink;
+}
+
+/* ปุ่ม */
+#btn {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background: #ff6b81;
+    border: none;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+/* กลีบ */
+.petal {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: pink;
+    border-radius: 50%;
+    opacity: 0.7;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    from { transform: translateY(-10vh); }
+    to { transform: translateY(110vh); }
+}
+</style>
+</head>
+
+<body>
+
+<div id="heart"></div>
+<div id="name">แพรววา 💖</div>
+
+<audio id="music" loop>
+    <source src="Therapist.mp3" type="audio/mpeg">
+</audio>
+
+<button id="btn">กดเพื่อเปิดเพลง 🎵</button>
+
+<script>
+// ===== ข้อความที่จะเปลี่ยน =====
+const messages = [
+    "I love you ",
+    "แพรววาน่ารัก ",
+    "คิดถึงนะ ",
+    "💖💖💖 "
+];
+
+let msgIndex = 0;
+
+function drawHeart() {
+    const word = messages[msgIndex];
+    let result = "";
+
+    for (let y = 1.5; y > -1.5; y -= 0.08) {
+        for (let x = -1.5; x < 1.5; x += 0.04) {
+
+            let formula = Math.pow(x*x + y*y - 1, 3) - x*x*y*y*y;
+
+            if (formula <= 0) {
+                result += `<span class="char">${word}</span>`;
+            } else {
+                result += " ".repeat(word.length);
+            }
+        }
+        result += "<br>";
+    }
+
+    document.getElementById("heart").innerHTML = result;
+}
+
+// เปลี่ยนข้อความทุก 3 วิ
+setInterval(() => {
+    msgIndex = (msgIndex + 1) % messages.length;
+    drawHeart();
+}, 3000);
+
+// วาดครั้งแรก
+drawHeart();
+
+// ===== เพลง =====
+const music = document.getElementById("music");
+document.getElementById("btn").onclick = () => {
+    music.play();
+    document.getElementById("btn").style.display = "none";
+};
+
+// ===== กลีบลอย =====
+function createPetal() {
+    const petal = document.createElement("div");
+    petal.classList.add("petal");
+    petal.style.left = Math.random() * 100 + "vw";
+    petal.style.animationDuration = (3 + Math.random() * 5) + "s";
+    document.body.appendChild(petal);
+
+    setTimeout(() => petal.remove(), 8000);
+}
+
+setInterval(createPetal, 200);
+</script>
+
+</body>
+</html>
